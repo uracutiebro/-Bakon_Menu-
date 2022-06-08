@@ -12,7 +12,7 @@ BMSound.Parent = game.Workspace
 local UIS = game:GetService("UserInputService")
 
 local newUi = Instance.new("ScreenGui")
-newUi.Name = "BakonUi"
+newUi.Name = "BakonMenu"
 newUi.Parent = Player.PlayerGui
 
 -- Title Frame --
@@ -185,6 +185,8 @@ wait()
 GenTemp("4CtrlTP", "Ctrl TP", false, Holder2)
 wait()
 GenTemp("5SellWood", "Sell Wood", false, Holder2)
+wait()
+GenTemp("6BaseWood", "Wood 2 Base", false, Holder2)
 
 --
 
@@ -230,6 +232,7 @@ local MaxCamButton = Holder2:FindFirstChild("2MaxCam"):FindFirstChild("TextButto
 local ShiftDelButton = Holder2:FindFirstChild("3ShiftDel"):FindFirstChild("TextButton")
 local CtrlTPButton = Holder2:FindFirstChild("4CtrlTP"):FindFirstChild("TextButton")
 local SellWoodButton = Holder2:FindFirstChild("5SellWood"):FindFirstChild("TextButton")
+local BaseWoodButton = Holder2:FindFirstChild("6BaseWood"):FindFirstChild("TextButton")
 
 -- Golden Button
 
@@ -529,6 +532,49 @@ SellWoodButton.MouseButton1Click:Connect(function()
 							for i=1,10 do
 								wait()
 								v.CFrame=CFrame.new(Vector3.new(355,5,357))*CFrame.Angles(math.rad(90),0,0)
+							end
+						end)
+					end
+				end
+				spawn(function()
+					for i=1,20 do
+						wait()
+						game.ReplicatedStorage.Interaction.ClientIsDragging:FireServer(Log)
+					end
+				end)
+			end
+		end
+	end
+end)
+
+-- Base Wood Button
+BaseWoodButton.MouseButton1Click:Connect(function()
+	
+	local PlayerBases = game.Workspace:FindFirstChild("Properties")
+	local Owners = PlayerBases:GetDescendants()
+	
+	local Base = nil
+	
+	for index, Owner in pairs(Owners) do
+		if Owner:IsA("ObjectValue") then
+			if tostring(Owner.Value) == Player.Name then
+				local BaseFound = Owner.Parent
+				Base = BaseFound
+			end
+		end
+	end
+	
+	
+	
+	for _, Log in pairs(workspace.LogModels:GetChildren()) do
+		if Log.Name:sub(1, 6) == "Loose_" and Log:findFirstChild("Owner") then
+			if Log.Owner.Value == game.Players.LocalPlayer then
+				for i,v in pairs(Log:GetChildren()) do
+					if v.Name=="WoodSection" then
+						spawn(function()
+							for i=1,10 do
+								wait()
+								v.CFrame=CFrame.new(Vector3.new(Base.PrimaryPart.Position + Vector3.new(0,20,0)))*CFrame.Angles(math.rad(90),0,0)
 							end
 						end)
 					end
