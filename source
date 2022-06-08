@@ -186,7 +186,7 @@ GenTemp("4CtrlTP", "Ctrl TP", false, Holder2)
 wait()
 GenTemp("5SellWood", "Sell Wood", false, Holder2)
 wait()
-GenTemp("6BaseWood", "Wood 2 Custom", false, Holder2)
+GenTemp("6BaseWood", "WIP", false, Holder2)
 
 --
 
@@ -549,7 +549,7 @@ end)
 
 -- Base Wood Button
 BaseWoodButton.MouseButton1Click:Connect(function()
-	for _, Log in pairs(workspace.LogModels:GetChildren()) do
+	--[[for _, Log in pairs(workspace.LogModels:GetChildren()) do
 		if Log.Name:sub(1, 6) == "Loose_" and Log:findFirstChild("Owner") then
 			if Log.Owner.Value == game.Players.LocalPlayer then
 				for i,v in pairs(Log:GetChildren()) do
@@ -558,8 +558,6 @@ BaseWoodButton.MouseButton1Click:Connect(function()
 							for i=1,10 do
 								wait()
 								v.CFrame=CFrame.new(Vector3.new(Waypoint.Position + Vector3.new(0,20,0)))*CFrame.Angles(math.rad(90),0,0)
-								wait()
-								Player.Character:MoveTo(v.Position)
 							end
 						end)
 					end
@@ -572,5 +570,5 @@ BaseWoodButton.MouseButton1Click:Connect(function()
 				end)
 			end
 		end
-	end
+	end]]
 end)
