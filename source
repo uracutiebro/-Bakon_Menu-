@@ -482,7 +482,11 @@ end)
 -- Max Cam Button
 
 MaxCamButton.MouseButton1Click:Connect(function()
-	Player.CameraMaxZoomDistance = math.huge
+	repeat
+		wait()
+		Player.CameraMaxZoomDistance = math.huge
+	until
+	false
 end)
 
 -- Shift Delete Button
