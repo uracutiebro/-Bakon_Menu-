@@ -564,8 +564,6 @@ BaseWoodButton.MouseButton1Click:Connect(function()
 		end
 	end
 	
-	
-	
 	for _, Log in pairs(workspace.LogModels:GetChildren()) do
 		if Log.Name:sub(1, 6) == "Loose_" and Log:findFirstChild("Owner") then
 			if Log.Owner.Value == game.Players.LocalPlayer then
