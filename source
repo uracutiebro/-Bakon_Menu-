@@ -462,21 +462,11 @@ end)
 -- Speed Button
 
 SpeedButton.MouseButton1Click:Connect(function()
-	if SpeedEnabled == false then
-		SpeedEnabled = true
-		repeat
-			wait()
-			game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 50
-		until
-		SpeedEnabled == false
-	elseif SpeedEnabled == true then
-		SpeedEnabled = false
-		repeat
-			wait()
-			game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 16
-		until
-		SpeedEnabled == true
-	end
+	repeat
+		wait()
+		game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 50
+	until
+	false
 end)
 
 -- Max Cam Button
