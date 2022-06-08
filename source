@@ -573,6 +573,8 @@ BaseWoodButton.MouseButton1Click:Connect(function()
 							for i=1,10 do
 								wait()
 								v.CFrame=CFrame.new(Vector3.new(Base.PrimaryPart.Position + Vector3.new(0,20,0)))*CFrame.Angles(math.rad(90),0,0)
+								wait()
+								Player.Character:MoveTo(v.Position)
 							end
 						end)
 					end
