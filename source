@@ -1,6 +1,8 @@
 local Player = game.Players.LocalPlayer
 
 local count = 0
+local Mouse = Player:GetMouse()
+local SpeedEnabled = false
 
 local BMSound = Instance.new("Sound")
 BMSound.Name = "BMloaded"
@@ -99,6 +101,14 @@ Holder.BackgroundTransparency = 1
 Holder.Name = "Holder"
 Holder.Parent = newUi
 
+local Holder2 = Instance.new("Frame")
+Holder2.Size = UDim2.new(0.075,0,0.7,0)
+Holder2.AnchorPoint = Vector2.new(1,0.5)
+Holder2.Position = UDim2.new(0.995,0,0.5,0)
+Holder2.BackgroundTransparency = 1
+Holder2.Name = "Holder2"
+Holder2.Parent = newUi
+
 local List = Instance.new("UIListLayout")
 List.Padding = UDim.new(0.025,0)
 List.FillDirection = Enum.FillDirection.Vertical
@@ -107,9 +117,12 @@ List.VerticalAlignment = Enum.VerticalAlignment.Center
 List.SortOrder = Enum.SortOrder.Name
 List.Parent = Holder
 
+local ListClone = List:Clone()
+ListClone.Parent = Holder2
+
 --
 
-local function GenTemp(FrameName, ButtonText, Gold)
+local function GenTemp(FrameName, ButtonText, Gold, Holder)
 	local Frame = Instance.new("Frame")
 	Frame.Name = tostring(FrameName)
 	Frame.Size = UDim2.new(1,0,0.075, 0)
@@ -149,19 +162,29 @@ local function GenTemp(FrameName, ButtonText, Gold)
 	Frame.Parent = Holder
 end
 
-GenTemp("1GoldAxe", "Axe Mod", true)
+GenTemp("1GoldAxe", "Axe Mod", true, Holder)
 wait()
-GenTemp("2Base", "Base", false)
+GenTemp("2Base", "Base", false, Holder)
 wait()
-GenTemp("3Sell", "Sell", false)
+GenTemp("3Sell", "Sell", false, Holder)
 wait()
-GenTemp("4BringWood", "Wood TP", false)
+GenTemp("4BringWood", "Wood TP", false, Holder)
 wait()
-GenTemp("5Heaven", "Heaven TP", false)
+GenTemp("5Heaven", "Heaven TP", false, Holder)
 wait()
-GenTemp("6Space", "Space TP", false)
+GenTemp("6Space", "Space TP", false, Holder)
 wait()
-GenTemp("7Custom", "Custom", false)
+GenTemp("7Custom", "Custom", false, Holder)
+wait()
+GenTemp("1Speed", "Speed", false, Holder2)
+wait()
+GenTemp("2MaxCam", "Max Cam", false, Holder2)
+wait()
+GenTemp("3ShiftDel", "Shift Delete", false, Holder2)
+wait()
+GenTemp("4CtrlTP", "Ctrl TP", false, Holder2)
+wait()
+GenTemp("5SellWood", "Sell Wood", false, Holder2)
 
 --
 
@@ -179,6 +202,20 @@ CustomInfo.TextXAlignment = Enum.TextXAlignment.Left
 CustomInfo.TextYAlignment = Enum.TextYAlignment.Bottom
 CustomInfo.Parent = newUi
 
+local ModInfo = Instance.new("TextLabel")
+ModInfo.Name = "ModInfo"
+ModInfo.Text = "Hold 'Left Control' and click anywhere to teleport. Hold 'Right Shift' and click anywhere to delete."
+ModInfo.TextColor3 = Color3.fromRGB(255,255,255)
+ModInfo.TextScaled = true
+ModInfo.Size = UDim2.new(0.1,0,0.05,0)
+ModInfo.AnchorPoint = Vector2.new(1,1)
+ModInfo.Position = UDim2.new(0.995,0,0.995,0)
+ModInfo.Font = Enum.Font.GothamBlack
+ModInfo.BackgroundTransparency = 1
+ModInfo.TextXAlignment = Enum.TextXAlignment.Right
+ModInfo.TextYAlignment = Enum.TextYAlignment.Bottom
+ModInfo.Parent = newUi
+
 -- Button Functions --
 
 local GoldenButton = Holder:FindFirstChild("1GoldAxe"):FindFirstChild("TextButton")
@@ -188,6 +225,11 @@ local BringButton = Holder:FindFirstChild("4BringWood"):FindFirstChild("TextButt
 local HeavenButton = Holder:FindFirstChild("5Heaven"):FindFirstChild("TextButton")
 local SpaceButton = Holder:FindFirstChild("6Space"):FindFirstChild("TextButton")
 local CustomButton = Holder:FindFirstChild("7Custom"):FindFirstChild("TextButton")
+local SpeedButton = Holder2:FindFirstChild("1Speed"):FindFirstChild("TextButton")
+local MaxCamButton = Holder2:FindFirstChild("2MaxCam"):FindFirstChild("TextButton")
+local ShiftDelButton = Holder2:FindFirstChild("3ShiftDel"):FindFirstChild("TextButton")
+local CtrlTPButton = Holder2:FindFirstChild("4CtrlTP"):FindFirstChild("TextButton")
+local SellWoodButton = Holder2:FindFirstChild("5SellWood"):FindFirstChild("TextButton")
 
 -- Golden Button
 
@@ -415,4 +457,93 @@ end)
 
 CustomButton.MouseButton1Click:Connect(function()
 	Player.Character:MoveTo(Waypoint.Position + Vector3.new(0,5,0))
+end)
+
+-- Speed Button
+
+SpeedButton.MouseButton1Click:Connect(function()
+	if SpeedEnabled == false then
+		SpeedEnabled = true
+		repeat
+			game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 50
+		until
+		SpeedEnabled == false
+	elseif SpeedEnabled == true then
+		SpeedEnabled = false
+		repeat
+			game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 16
+		until
+		SpeedEnabled == true
+	end
+end)
+
+-- Max Cam Button
+
+MaxCamButton.MouseButton1Click:Connect(function()
+	Player.CameraMaxZoomDistance = math.huge
+end)
+
+-- Shift Delete Button
+
+ShiftDelButton.MouseButton1Click:Connect(function()
+	Mouse.Button1Down:connect(function()
+		if not game:GetService("UserInputService"):IsKeyDown(Enum.KeyCode.RightShift) then return end
+		if not Mouse.Target then return end
+		Mouse.Target:Destroy()
+	end)
+end)
+
+-- Control TP Button
+
+CtrlTPButton.MouseButton1Click:Connect(function()
+	local UIS = game:GetService("UserInputService")
+
+	local Player = game.Players.LocalPlayer
+	local Mouse = Player:GetMouse()
+
+
+	function GetCharacter()
+		return game.Players.LocalPlayer.Character
+	end
+
+	function Teleport(pos)
+		local Char = GetCharacter()
+		if Char then
+			Char:MoveTo(pos)
+		end
+	end
+
+
+	UIS.InputBegan:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseButton1 and UIS:IsKeyDown(Enum.KeyCode.LeftControl) then
+			Teleport(Mouse.Hit.p)
+		end
+	end)
+end)
+
+-- Sell Wood
+
+SellWoodButton.MouseButton1Click:Connect(function()
+	for _, Log in pairs(workspace.LogModels:GetChildren()) do
+		if Log.Name:sub(1, 6) == "Loose_" and Log:findFirstChild("Owner") then
+			if Log.Owner.Value == game.Players.LocalPlayer then
+				for i,v in pairs(Log:GetChildren()) do
+					if v.Name=="WoodSection" then
+						spawn(function()
+							for i=1,10 do
+								wait()
+								v.CFrame=CFrame.new(Vector3.new(355,5,357))*CFrame.Angles(math.rad(90),0,0)
+							end
+						end)
+					end
+				end
+				spawn(function()
+					for i=1,20 do
+						wait()
+						game.ReplicatedStorage.Interaction.ClientIsDragging:FireServer(Log)
+					end
+				end)
+			end
+		end
+	end
 end)
